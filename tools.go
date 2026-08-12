@@ -10,6 +10,9 @@ import (
 	"github.com/Vilsol/timeless-jewels/calculator"
 	"github.com/Vilsol/timeless-jewels/data"
 	"github.com/Vilsol/timeless-jewels/wasm/exposition"
+
+	// findAll sweeps the shipped tables, so this tool needs them installed.
+	_ "github.com/Vilsol/timeless-jewels/data/embedded"
 )
 
 // Uses separate steps so finder step has the new data loaded by data package

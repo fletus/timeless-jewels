@@ -4,6 +4,11 @@ import (
 	"github.com/Vilsol/crystalline"
 	"github.com/Vilsol/timeless-jewels/calculator"
 	"github.com/Vilsol/timeless-jewels/data"
+
+	// The exposed lookups answer from the shipped tables, so the wasm build installs them.
+	// Since the data package stopped embedding its own assets, this import is what carries
+	// them — without it every exposed getter returns nil and SkillTreeJSON is empty.
+	_ "github.com/Vilsol/timeless-jewels/data/embedded"
 )
 
 func Expose() *crystalline.Exposer {
