@@ -19,6 +19,15 @@ const (
 
 type NumberGenerator struct {
 	state [4]uint32
+
+	// The seeded state is a pure function of (graph id, jewel seed), and the calculator asks
+	// for the same pair twice in a row on every notable: IsPassiveSkillReplaced reseeds to
+	// roll the replacement chance, then ReplacePassiveSkill reseeds to the identical state to
+	// roll it again. Reset is the most expensive operation here — 11 mixing rounds plus 8 full
+	// state generations, ~35% of Calculate — so the second one is memoised rather than redone.
+	seededKey   [2]uint32
+	seededState [4]uint32
+	seeded      bool
 }
 
 func NewRNG() *NumberGenerator {
@@ -26,15 +35,23 @@ func NewRNG() *NumberGenerator {
 }
 
 func (g *NumberGenerator) Reset(passiveSkill *data.PassiveSkill, timelessJewel data.TimelessJewel) {
+	key := [2]uint32{passiveSkill.PassiveSkillGraphID, timelessJewel.GetSeed()}
+
+	if g.seeded && g.seededKey == key {
+		g.state = g.seededState
+		return
+	}
+
 	g.state[0] = InitialStateConstant0
 	g.state[1] = InitialStateConstant1
 	g.state[2] = InitialStateConstant2
 	g.state[3] = InitialStateConstant3
 
-	g.Initialize([]uint32{
-		passiveSkill.PassiveSkillGraphID,
-		timelessJewel.GetSeed(),
-	})
+	g.Initialize([]uint32{key[0], key[1]})
+
+	g.seededKey = key
+	g.seededState = g.state
+	g.seeded = true
 }
 
 func (g *NumberGenerator) Initialize(seeds []uint32) {
