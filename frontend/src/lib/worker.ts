@@ -9,14 +9,16 @@ function getWorker() {
   const remote = Comlink.wrap<WorkerType>(theWorker);
   const obj = {
     boot: remote.boot,
-    search: (args: Parameters<WorkerType['search']>[0], callback: Parameters<WorkerType['search']>[1]) =>
-      remote.search(
+    search: (args: Parameters<WorkerType['search']>[0], callback: Parameters<WorkerType['search']>[1]) => {
+      const storedMax = localStorage.getItem('maxTotalWeight');
+      return remote.search(
         {
           ...args,
-          maxTotalWeight: Number(localStorage.getItem('maxTotalWeight') || 0)
+          maxTotalWeight: storedMax === null || storedMax === '' ? -1 : Number(storedMax)
         },
         callback
-      )
+      );
+    }
   } as typeof remote;
   return { syncWorker: theWorker, syncWrap: obj };
 }
