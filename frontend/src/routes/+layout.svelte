@@ -8,6 +8,11 @@
   import { initializeCrystalline } from '../lib/types';
 
   let wasmLoading = true;
+  let maxTotalWeight = browser ? Number(localStorage.getItem('maxTotalWeight') || 0) : 0;
+
+  $: if (browser) {
+    localStorage.setItem('maxTotalWeight', maxTotalWeight.toString());
+  }
 
   // eslint-disable-next-line no-undef
   const go = new Go();
@@ -42,4 +47,9 @@
   </div>
 {:else}
   <slot />
+  <div class="fixed bottom-2 left-2 z-50 flex flex-row items-center gap-2 bg-black/80 backdrop-blur-sm themed rounded p-2">
+    <div class="min-w-fit">Max Total Weight:</div>
+    <input type="number" min="0" bind:value={maxTotalWeight} class="w-24" />
+    <span class="text-sm text-neutral-400">0 = no limit</span>
+  </div>
 {/if}

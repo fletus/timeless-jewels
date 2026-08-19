@@ -319,6 +319,7 @@ export interface ReverseSearchConfig {
   nodes: number[];
   stats: StatConfig[];
   minTotalWeight: number;
+  maxTotalWeight: number;
 }
 
 export interface SearchWithSeed {

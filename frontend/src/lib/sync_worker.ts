@@ -66,6 +66,10 @@ const obj = {
           return false;
         }
 
+        if (args.maxTotalWeight > 0 && g.weight > args.maxTotalWeight) {
+          return false;
+        }
+
         for (const stat of args.stats) {
           if ((g.statCounts[stat.id] === undefined && stat.min > 0) || g.statCounts[stat.id] < stat.min) {
             return false;
