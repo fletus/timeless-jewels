@@ -1,13 +1,19 @@
-name: release
+name: deploy
 
 on:
   push:
+    branches:
+      - main
     tags:
       - v*
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   release:
-    name: Release
+    name: Build and deploy GitHub Pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
