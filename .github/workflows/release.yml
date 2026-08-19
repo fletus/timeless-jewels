@@ -47,3 +47,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./frontend/build
           exclude_assets: ''
+
+# Actions enabled on fork; main pushes deploy the site.
