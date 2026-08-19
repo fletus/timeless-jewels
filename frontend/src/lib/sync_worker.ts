@@ -66,7 +66,8 @@ const obj = {
           return false;
         }
 
-        if (args.maxTotalWeight > 0 && g.weight > args.maxTotalWeight) {
+        // -1 is the internal sentinel for "no maximum". Zero is a real maximum.
+        if (args.maxTotalWeight >= 0 && g.weight > args.maxTotalWeight) {
           return false;
         }
 
